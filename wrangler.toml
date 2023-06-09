@@ -1,0 +1,8 @@
+name = "games"
+main = "index.js"
+compatibility_date = "2022-06-07"
+
+kv_namespaces = [
+  { binding = "games", id = "dcac29c99a834640839eb31c360882ee", preview_id = "c3adce3949b54df69f9da03b6feb14b1" }
+]
+
