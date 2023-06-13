@@ -28,10 +28,28 @@ router.get('/games/list', async (request, env, context) => {
 	});
 });
 
+router.get('/games/borrowed', async (request, env, context) => {
+	// if (request.headers.get('x-cfp') != env.CFP_PASSWORD) {
+	// 	return new Response(JSON.stringify({"id":"error","name":"Error retrieving list of borrowed games"}), {status: 200, headers: {...corsHeaders(env),}});
+	// }
+
+	let keys = await env.borrowed.list();
+
+	let json = await Promise.all(keys.keys.map(key => env.borrowed.get(key.name, { type: "json" })))
+		.then(values => JSON.stringify(values));
+	return new Response(json, {
+		status: 200,
+		headers: {
+			...corsHeaders(env),
+			"Content-type": "application/json",
+		}
+	});
+});
+
 /*
 Example post body
 {
-   "id": "splendor",
+   "id": "68448",
    "borrowed": {
      "name":"Paul",
      "email":"pajones@adobe.com",
@@ -41,19 +59,28 @@ Example post body
 */
 router.put('/games/borrow', async (request, env, context) => {
 		if (request.headers.get('x-cfp') != env.CFP_PASSWORD) {
-				return new Response(JSON.stringify({"error": "forbidden"}), {status: 403});
+				return new Response(JSON.stringify({"error": "forbidden"}), {
+					status: 403,
+					headers: {
+						...corsHeaders(env),
+						"Content-type": "application/json"
+					}
+				});
 		}
-		let content = await request.json();
-		if (content == undefined) {
-				return new Response('Please provide borrowers information.');
+		let game = await request.json();
+		if (game == undefined) {
+				return new Response(JSON.stringify({'error': 'Please provide borrowers information.'}), {
+					status: 400,
+					headers: {
+						...corsHeaders(env),
+						"Content-type": "application/json"
+					}
+				});
 		}
-
-		let game = await env.games.get(content.id, { type: "json" });
-		game.borrowed = content.borrowed;
 
 		let json = JSON.stringify(game);
 		// Just hoping it will finish correctly async.
-		env.games.put(game.id, json);
+		env.borrowed.put(game.id, json);
 
 		return new Response(json, {
 				status: 200,
@@ -66,25 +93,33 @@ router.put('/games/borrow', async (request, env, context) => {
 
 /*
 Example post body
-{ "id": "splendor" }
+{ "id": "68448" }
 */
 router.put('/games/return', async (request, env, context) => {
 		if (request.headers.get('x-cfp') != env.CFP_PASSWORD) {
-				return new Response(JSON.stringify({"error": "forbidden"}), {status: 403});
+			return new Response(JSON.stringify({"error": "forbidden"}), {
+				status: 403,
+				headers: {
+					...corsHeaders(env),
+					"Content-type": "application/json"
+				}
+			});
 		}
-		let content = await request.json();
-		if (content == undefined) {
-				return new Response('Please provide borrowers information.');
+		let game = await request.json();
+		if (game == undefined) {
+			return new Response(JSON.stringify({'error': 'Please provide the id of the game you are returning.'}), {
+				status: 400,
+				headers: {
+					...corsHeaders(env),
+					"Content-type": "application/json"
+				}
+			});
 		}
 
-		let game = await env.games.get(content.id, { type: "json" });
-		delete game.borrowed;
-
-		let json = JSON.stringify(game);
 		// Just hoping it will finish correctly async.
-		env.games.put(game.id, json);
+		env.borrowed.delete(game.id);
 
-		return new Response(json, {
+		return new Response(JSON.stringify(game), {
 				status: 200,
 				headers: {
 						...corsHeaders(env),
@@ -107,7 +142,8 @@ export const withCorsPreflight = (request, env, context) => {
 				});
 		}
 };
-router.all('*', withCorsPreflight).all('*', () => new Response('404, not found!', { status: 404 }));
+router.all('*', withCorsPreflight)
+	.all('*', (request, env, context) => new Response('404, not found!', { status: 404, headers:{...corsHeaders(env)} }));
 
 export default {
 	fetch: router.handle,

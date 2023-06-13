@@ -16,6 +16,7 @@ def import_games():
 
 		root = ET.fromstring(response.text)
 		games = []
+		game_data = []
 		for item in root.findall('./item'):
 				id = item.attrib['objectid']
 				game = {'id': id}
@@ -25,18 +26,19 @@ def import_games():
 						if child.tag == 'thumbnail':
 								game['cover'] = child.text
 				games.append({'key': id, 'value': json.dumps(game)})
+				game_data.append(game)
 
-		response = requests.put(
-				'https://api.cloudflare.com/client/v4/accounts/9f58823c0b8a788d8bb3b63414f3a085/storage/kv/namespaces/dcac29c99a834640839eb31c360882ee/bulk',
-				headers={
-						'Content-Type': 'application/json',
-						'X-Auth-Email': 'shagreel@gmail.com',
-						'X-Auth-Key': os.environ['API_KEY']
-				},
-				data=json.dumps(games))
+		# response = requests.put(
+		# 		'https://api.cloudflare.com/client/v4/accounts/9f58823c0b8a788d8bb3b63414f3a085/storage/kv/namespaces/dcac29c99a834640839eb31c360882ee/bulk',
+		# 		headers={
+		# 				'Content-Type': 'application/json',
+		# 				'X-Auth-Email': 'shagreel@gmail.com',
+		# 				'X-Auth-Key': os.environ['API_KEY']
+		# 		},
+		# 		data=json.dumps(games))
+		# print(response.status_code, response.text)
 
-		print(response.status_code, response.text)
-		print(json.dumps(games))
+		print(json.dumps(game_data))
 
 
 import_games()
