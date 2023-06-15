@@ -95,6 +95,11 @@
     "cover": "https://cf.geekdo-images.com/okM0dq_bEXnbyQTOvHfwRA__thumb/img/88274KiOg94wziybVHyW8AeOiXg=/fit-in/200x150/filters:strip_icc()/pic6544250.png"
   },
   {
+    "id": "295947",
+    "name": "Cascadia",
+    "cover": "https://cf.geekdo-images.com/MjeJZfulbsM1DSV3DrGJYA__thumb/img/tVSFjSxYEcw7sKj3unIIQV8kxoc=/fit-in/200x150/filters:strip_icc()/pic5100691.jpg"
+  },
+  {
     "id": "84876",
     "name": "The Castles of Burgundy",
     "cover": "https://cf.geekdo-images.com/5CFwjd8zTcGYVUnkXh04hw__thumb/img/0AG_6zsfYQjqlUHG0-_8lcjp8rc=/fit-in/200x150/filters:strip_icc()/pic1176894.jpg"
@@ -132,7 +137,7 @@
   {
     "id": "1294",
     "name": "Clue",
-    "cover": "https://cf.geekdo-images.com/8tkwuJwlaO3o46DzEsR4tA__thumb/img/KdsBE2hkteLT_NpWoD53XjC-X5g=/fit-in/200x150/filters:strip_icc()/pic46934.jpg"
+    "cover": "https://cf.geekdo-images.com/wNcbhLJGGjakYjjm1gV_kQ__thumb/img/yaeAeMVffkAZEjgYs0DvT4Zk2z0=/fit-in/200x150/filters:strip_icc()/pic7563466.png"
   },
   {
     "id": "178900",
@@ -380,6 +385,11 @@
     "cover": "https://cf.geekdo-images.com/nhoyoLpYPC2b3UiJ5kJ0yg__thumb/img/KVmexHT6N_fquB1CQl9QRNYCvD0=/fit-in/200x150/filters:strip_icc()/pic1473629.jpg"
   },
   {
+    "id": "237182",
+    "name": "Root",
+    "cover": "https://cf.geekdo-images.com/JUAUWaVUzeBgzirhZNmHHw__thumb/img/ACovMZzGGIsBRyEQXFnsT8282NM=/fit-in/200x150/filters:strip_icc()/pic4254509.jpg"
+  },
+  {
     "id": "811",
     "name": "Rummikub",
     "cover": "https://cf.geekdo-images.com/LeaLDlTTmeN639MfuflcMw__thumb/img/CSPEyoFAcA3WwtzDekp3Mfepcek=/fit-in/200x150/filters:strip_icc()/pic2286966.jpg"
@@ -488,5 +498,10 @@
     "id": "224710",
     "name": "Zombicide: Green Horde",
     "cover": "https://cf.geekdo-images.com/rtJTab2_kHN2k4_nUddRTQ__thumb/img/H17dequj7LYB-NKcZo352sAxQ3k=/fit-in/200x150/filters:strip_icc()/pic3564805.jpg"
+  },
+  {
+    "id": "331699",
+    "name": "Zoo King",
+    "cover": "https://cf.geekdo-images.com/ttybjYmrHeELkfUwaL_uHg__thumb/img/deQTeej4WMZ9alXOCAk9DzXw3X0=/fit-in/200x150/filters:strip_icc()/pic6406594.png"
   }
 ]
