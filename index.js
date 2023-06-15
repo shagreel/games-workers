@@ -1,4 +1,5 @@
 import { Router } from 'itty-router';
+import { emailLateBorrowers } from "./reminder";
 
 // Create a new router
 const router = Router();
@@ -28,16 +29,20 @@ router.get('/games/list', async (request, env, context) => {
 	});
 });
 
+const getBorrowed = async (env) => {
+	const keys = await env.borrowed.list();
+
+	return Promise.all(keys.keys.map(key => env.borrowed.get(key.name, { type: "json" })));
+};
+
 router.get('/games/borrowed', async (request, env, context) => {
-	// if (request.headers.get('x-cfp') != env.CFP_PASSWORD) {
-	// 	return new Response(JSON.stringify({"id":"error","name":"Error retrieving list of borrowed games"}), {status: 200, headers: {...corsHeaders(env),}});
-	// }
+	if (request.headers.get('x-cfp') != env.CFP_PASSWORD) {
+		return new Response(JSON.stringify({"id":"error","name":"Error retrieving list of borrowed games"}), {status: 200, headers: {...corsHeaders(env),}});
+	}
 
-	let keys = await env.borrowed.list();
+	const json = await getBorrowed(env);
 
-	let json = await Promise.all(keys.keys.map(key => env.borrowed.get(key.name, { type: "json" })))
-		.then(values => JSON.stringify(values));
-	return new Response(json, {
+	return new Response(JSON.stringify(json), {
 		status: 200,
 		headers: {
 			...corsHeaders(env),
@@ -145,6 +150,12 @@ export const withCorsPreflight = (request, env, context) => {
 router.all('*', withCorsPreflight)
 	.all('*', (request, env, context) => new Response('404, not found!', { status: 404, headers:{...corsHeaders(env)} }));
 
+
+
 export default {
 	fetch: router.handle,
+	async scheduled(event, env, ctx) {
+		const json = await getBorrowed(env);
+		ctx.waitUntil(emailLateBorrowers(json));
+	},
 };

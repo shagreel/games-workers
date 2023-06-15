@@ -7,6 +7,9 @@ kv_namespaces = [
   { binding = "borrowed", id = "b24abd6abc704ea8b702c6da9b3fab66", preview_id = "9dcae41ace404f24a77b3e27153d08a3" }
 ]
 
+[triggers]
+crons = ["12 6 * * *"]
+
 [env.stage]
 name = "games-stage"
 vars = { STAGE = true, CFP_PASSWORD = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08" }
