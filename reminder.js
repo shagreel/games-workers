@@ -1,6 +1,3 @@
-const games = await fetch("https://games.chill.ws/games.json")
-    .then((response) => response.json());
-
 const makeListString = (arr) => {
     if (arr.length === 1) return arr[0];
     const firsts = arr.slice(0, arr.length - 1);
@@ -39,6 +36,8 @@ export const sendEmail = async (borrowed) => {
 };
 
 export const emailLateBorrowers = async (borrowed) => {
+    const games = await fetch("https://games.chill.ws/games.json")
+        .then((response) => response.json());
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     const late = borrowed.filter(b => new Date(b.borrowed.date) < sevenDaysAgo )
         .reduce((r, a) => {

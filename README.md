@@ -11,11 +11,7 @@ Before publishing your code you need to edit `wrangler.toml` file and add your C
 Once you are ready, you can publish your code by running the following command:
 
 ```sh
-$ npm run deploy
+$ npx wrangler publish
 # or
-$ yarn run deploy
-# or
-$ pnpm run deploy
-# or
-$ npx wrangler deploy
+$ npx wrangler publish --env stage
 ```
