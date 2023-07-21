@@ -1,4 +1,5 @@
-import games from "./data.json";
+const games = await fetch("https://games.chill.ws/games.json")
+    .then((response) => response.json());
 
 const makeListString = (arr) => {
     if (arr.length === 1) return arr[0];
