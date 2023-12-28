@@ -3,7 +3,7 @@ import os
 import json
 import xml.etree.ElementTree as ET
 import time
-
+import boto3
 
 def import_games():
 		code = 0
@@ -38,7 +38,16 @@ def import_games():
 		# 		data=json.dumps(games))
 		# print(response.status_code, response.text)
 
-		print(json.dumps(game_data))
+		s3 = boto3.resource('s3',
+			endpoint_url = 'https://9f58823c0b8a788d8bb3b63414f3a085.r2.cloudflarestorage.com',
+			aws_access_key_id = '5fac686d69c2f4ebe118bbcb5070248a',
+			aws_secret_access_key = os.environ['API_KEY'],
+			region_name = 'wnam'
+		)
+		game_file = s3.Object('games', 'games.json')
+		game_file.put(Body=json.dumps(game_data))
 
+		# print(json.dumps(game_data))
+		print('Import complete')
 
 import_games()

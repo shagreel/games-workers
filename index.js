@@ -84,9 +84,7 @@ router.put('/games/borrow', async (request, env, context) => {
 		}
 
 		let json = JSON.stringify(game);
-		// Just hoping it will finish correctly async.
-		env.borrowed.put(game.id, json);
-
+		let resp = await env.borrowed.put(game.id, json);
 		return new Response(json, {
 				status: 200,
 				headers: {
@@ -121,8 +119,7 @@ router.put('/games/return', async (request, env, context) => {
 			});
 		}
 
-		// Just hoping it will finish correctly async.
-		env.borrowed.delete(game.id);
+		let resp = await env.borrowed.delete(game.id);
 
 		return new Response(JSON.stringify(game), {
 				status: 200,

@@ -1,3 +1,4 @@
 .idea
 .DS_Store
 .dev.vars
+**/__target__
