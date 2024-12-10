@@ -99,20 +99,17 @@ router.put('/games/borrow', async (request, env, context) => {
 				.run();
 			json = JSON.stringify(game);
 		} catch (e) {
-			console.log("Tried to insert a dup")
-			const { results } = await env.DB.prepare("SELECT * FROM borrowed WHERE id = ? LIMIT 1")
+			const borrowed = await env.DB.prepare("SELECT * FROM borrowed WHERE id = ? LIMIT 1")
 				.bind(game.id)
-				.run();
-			json = JSON.stringify(results.map( b => {
-				return {
-					"id": b['id'],
+				.first();
+			json = JSON.stringify( {
+					"id": borrowed['id'],
 					"borrowed": {
-						"name": b['name'],
-						"email": b['email'],
-						"date": b['date']
+						"name": borrowed['name'],
+						"email": borrowed['email'],
+						"date": borrowed['date']
 					}
-				}
-			}).shift());
+				});
 		}
 		return new Response(json, {
 			status: 200,
