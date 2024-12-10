@@ -30,9 +30,18 @@ router.get('/games/list', async (request, env, context) => {
 });
 
 const getBorrowed = async (env) => {
-	const keys = await env.borrowed.list();
+	const { results } = await env.DB.prepare("SELECT * FROM borrowed LIMIT 500").run();
 
-	return Promise.all(keys.keys.map(key => env.borrowed.get(key.name, { type: "json" })));
+	return results.map( b => {
+		return {
+			"id": b['id'],
+			"borrowed": {
+				"name": b['name'],
+				"email": b['email'],
+				"date": b['date']
+			}
+		}
+	});
 };
 
 router.get('/games/borrowed', async (request, env, context) => {
@@ -83,14 +92,34 @@ router.put('/games/borrow', async (request, env, context) => {
 				});
 		}
 
-		let json = JSON.stringify(game);
-		let resp = await env.borrowed.put(game.id, json);
-		return new Response(json, {
-				status: 200,
-				headers: {
-						...corsHeaders(env),
-						"Content-type": "application/json"
+		let json;
+		try {
+			await env.DB.prepare("INSERT INTO borrowed (id, name, email, date) VALUES (?, ?, ?, ?)")
+				.bind(game.id, game.borrowed.name, game.borrowed.email, game.borrowed.date)
+				.run();
+			json = JSON.stringify(game);
+		} catch (e) {
+			console.log("Tried to insert a dup")
+			const { results } = await env.DB.prepare("SELECT * FROM borrowed WHERE id = ? LIMIT 1")
+				.bind(game.id)
+				.run();
+			json = JSON.stringify(results.map( b => {
+				return {
+					"id": b['id'],
+					"borrowed": {
+						"name": b['name'],
+						"email": b['email'],
+						"date": b['date']
+					}
 				}
+			}).shift());
+		}
+		return new Response(json, {
+			status: 200,
+			headers: {
+				...corsHeaders(env),
+				"Content-type": "application/json"
+			}
 		});
 });
 
@@ -119,15 +148,26 @@ router.put('/games/return', async (request, env, context) => {
 			});
 		}
 
-		let resp = await env.borrowed.delete(game.id);
-
-		return new Response(JSON.stringify(game), {
+		const { success } = await env.DB.prepare("DELETE FROM borrowed WHERE id = ?")
+			.bind(game.id)
+			.run();
+		if (success) {
+			return new Response(JSON.stringify(game), {
 				status: 200,
 				headers: {
-						...corsHeaders(env),
-						"Content-type": "application/json"
+					...corsHeaders(env),
+					"Content-type": "application/json"
 				}
-		});
+			});
+		} else {
+			return new Response(JSON.stringify({'error': 'Returning the game failed. Please try again.'}), {
+				status: 400,
+				headers: {
+					...corsHeaders(env),
+					"Content-type": "application/json"
+				}
+			});
+		}
 });
 
 /*

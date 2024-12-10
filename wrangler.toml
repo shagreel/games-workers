@@ -7,6 +7,10 @@ kv_namespaces = [
   { binding = "borrowed", id = "b24abd6abc704ea8b702c6da9b3fab66", preview_id = "9dcae41ace404f24a77b3e27153d08a3" }
 ]
 
+d1_databases = [
+  { binding = "DB", database_name = "games", database_id = "51d83031-bf71-4f18-bc05-64ed949a6dfc" }
+]
+
 [triggers]
 crons = ["12 6 * * *"]
 
@@ -18,3 +22,8 @@ kv_namespaces = [
   { binding = "games", id = "c3adce3949b54df69f9da03b6feb14b1", preview_id = "c3adce3949b54df69f9da03b6feb14b1" },
   { binding = "borrowed", id = "9dcae41ace404f24a77b3e27153d08a3", preview_id = "9dcae41ace404f24a77b3e27153d08a3" }
 ]
+
+d1_databases = [
+  { binding = "DB", database_name = "games", database_id = "51d83031-bf71-4f18-bc05-64ed949a6dfc" }
+]
+
