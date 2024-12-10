@@ -11,6 +11,9 @@ d1_databases = [
   { binding = "DB", database_name = "games", database_id = "51d83031-bf71-4f18-bc05-64ed949a6dfc" }
 ]
 
+[observability.logs]
+enabled = true
+
 [triggers]
 crons = ["12 6 * * *"]
 

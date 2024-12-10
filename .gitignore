@@ -3,3 +3,4 @@
 .dev.vars
 **/__target__
 node_modules
+import/API_KEY
